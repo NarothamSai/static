@@ -1,13 +1,11 @@
 pipeline{
     agent any
     stages{
-        stage("Build"){
+        stage('upload to AWS'){
             steps{
-                sh 'echo "Hello world"'
-                sh '''
-                    echo "multiline shell steps works"
-                    ls -lah
-                '''
+                withAWS(region:'us-west-2',credentials:'narotham'){
+                    s3Upload(pathStyleAccessEnabled:true, payloadSigningEnabled: true, file:'index.html', bucket:'narotham-udagram')
+                }
             }
         }
     }
